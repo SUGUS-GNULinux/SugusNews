@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">SugusNews</string>
+    <string name="reload">Recarga</string>
+    <string name="action_acerca">Acerca de Sugus</string>
+    <string name="textdate">Fecha publicación: </string>
+    <string name="textpub">Publicado por: </string>
+    <string name="textwebpage">Página web: </string>
+    <string name="linkwebpage">http://sugus.eii.us.es/</string>
+    <string name="textsugupedia">Sugupedia:</string>
+    <string name="linksugupedia">https://sugus.eii.us.es/sugupedia/index.php?title=Página_principal</string>
+    <string name="textredes">Redes Sociales: </string>
+    <string name="textfacebook">Facebook: </string>
+    <string name="linkfacebook">https://www.facebook.com/pages/Sugus-GNULinux/448177455217866</string>
+    <string name="texttwitter">Twitter: </string>
+    <string name="linktwitter">https://twitter.com/sugus_etsii</string>
+    <string name="textaboutsugus">Acerca de Sugus</string>
+    <string name="aboutsugus"> SUGUS es el grupo de usuarios y usuarias de Software Libre de la Escuela
+        Superior de Ingeniería Informática de la Universidad de Sevilla. Nuestro objetivo es fomentar el uso
+        y la participación en el Software Libre dentro de la comunidad universitaria. Para ello, realizamos
+        un sinfín de actividades que abarcan desde la realización de charlas sobre lenguajes de programación
+        hasta talleres donde se enseñan a usar distintas herramientas libres.</string>
+    <string name="textaboutapp">Acerca de la aplicación</string>
+    <string name="aboutapp">Aplicación creada por <a href="https://sugus.eii.us.es/sugupedia/index.php?title=Usuario:Guille">Guillermo de la Cruz Dorado</a>, estudiante de Ingeniería Informática
+    de Computadores y miembro de Sugus.</string>
+</resources>
