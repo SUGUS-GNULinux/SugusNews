@@ -1,4 +1,5 @@
 # SugusNews
+##Version: 0.6.1
 Android app for Sugus association to watch recent news
 
 Sugus website: http://sugus.eii.us.es/
