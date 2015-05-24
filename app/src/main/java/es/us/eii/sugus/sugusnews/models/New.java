@@ -1,4 +1,4 @@
-package es.us.eii.sugus.sugusnews;
+package es.us.eii.sugus.sugusnews.models;
 
 /**
  * Created by guilledelacruz on 10/05/15.

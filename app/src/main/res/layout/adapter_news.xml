@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp">
 
     <TextView
         android:id="@+id/newstitulo"
@@ -9,17 +13,21 @@
         android:layout_height="wrap_content"
         android:textColor="#000000"
         android:textSize="25dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:text="Titulo"/>
 
     <TextView
         android:id="@+id/newsdate"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:text="Fecha"/>
 
     <TextView
         android:id="@+id/newspub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#585858"/>
+        android:textColor="#585858"
+        android:text="publicador"/>
 
 </LinearLayout>

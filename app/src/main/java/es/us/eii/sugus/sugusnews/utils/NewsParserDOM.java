@@ -1,4 +1,4 @@
-package es.us.eii.sugus.sugusnews;
+package es.us.eii.sugus.sugusnews.utils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,6 +14,8 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import es.us.eii.sugus.sugusnews.models.New;
 
 /**
  * Created by guilledelacruz on 10/05/15.

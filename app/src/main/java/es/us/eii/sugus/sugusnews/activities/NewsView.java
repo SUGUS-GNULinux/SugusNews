@@ -1,4 +1,4 @@
-package es.us.eii.sugus.sugusnews;
+package es.us.eii.sugus.sugusnews.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.widget.TextView;
+
+import es.us.eii.sugus.sugusnews.R;
 
 /**
  * Created by guilledelacruz on 18/05/15.

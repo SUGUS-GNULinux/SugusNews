@@ -1,4 +1,4 @@
-package es.us.eii.sugus.sugusnews;
+package es.us.eii.sugus.sugusnews.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import es.us.eii.sugus.sugusnews.models.New;
+import es.us.eii.sugus.sugusnews.R;
 
 /**
  * Created by guilledelacruz on 10/05/15.

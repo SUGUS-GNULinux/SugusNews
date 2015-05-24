@@ -22,4 +22,8 @@
     <string name="textaboutapp">Acerca de la aplicación</string>
     <string name="aboutapp">Aplicación creada por <a href="https://sugus.eii.us.es/sugupedia/index.php?title=Usuario:Guille">Guillermo de la Cruz Dorado</a>, estudiante de Ingeniería Informática
     de Computadores y miembro de Sugus.</string>
+    <string name="title_activity_in_app_updater">Actualización</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

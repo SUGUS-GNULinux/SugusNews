@@ -1,7 +1,11 @@
-package es.us.eii.sugus.sugusnews;
+package es.us.eii.sugus.sugusnews.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -12,9 +16,20 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.us.eii.sugus.sugusnews.R;
+import es.us.eii.sugus.sugusnews.adapters.AdapterMember;
+import es.us.eii.sugus.sugusnews.adapters.AdapterNew;
+import es.us.eii.sugus.sugusnews.models.Member;
+import es.us.eii.sugus.sugusnews.models.New;
+import es.us.eii.sugus.sugusnews.updater.InAppUpdater;
+import es.us.eii.sugus.sugusnews.updater.UpdateFinder;
+import es.us.eii.sugus.sugusnews.utils.MemberParserJSoup;
+import es.us.eii.sugus.sugusnews.utils.NewsParserDOM;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -23,6 +38,10 @@ public class MainActivity extends ActionBarActivity {
     private List<Member> ms = new ArrayList<Member>();
     private AdapterNew nots;
     private AdapterMember mems;
+
+    private String appVersion;
+
+    private String appVersionUrl = "https://github.com/SUGUS-GNULinux/SugusNews/blob/master/README.md";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +57,7 @@ public class MainActivity extends ActionBarActivity {
         m.setAdapter(mems);
         n.setAdapter(nots);
 
-        CargarHtmlTask tareaMembers = new CargarHtmlTask();
-        tareaMembers.execute();
 
-        CargarRssTask tareaNews = new CargarRssTask();
-        tareaNews.execute();
 
         Resources res = getResources();
 
@@ -69,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
 
                 TextView title = (TextView) view.findViewById(R.id.newstitulo);
 
-                if(!title.getText().toString().equals("No hay noticias disponibles")){
+                if (!title.getText().toString().equals("No hay noticias disponibles")) {
 
                     New n = (New) parent.getItemAtPosition(position);
 
@@ -84,7 +99,41 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+
+        if(isNetworkAvailable()){
+            CargarHtmlTask tareaMembers = new CargarHtmlTask();
+            tareaMembers.execute();
+
+            CargarRssTask tareaNews = new CargarRssTask();
+            tareaNews.execute();
+
+            searchUpdates(appVersionUrl);
+        }else{
+            Toast.makeText(this, "No hay conexión a internet", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
     }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void searchUpdates(String url) {
+        try {
+            this.appVersion = getPackageManager().getPackageInfo("es.us.eii.sugus.sugusnews",0).versionName.trim();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        new UpdateFinder(this,appVersion,url).execute();
+    }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -100,11 +149,16 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.reload) {
-            CargarHtmlTask tareaMembers = new CargarHtmlTask();
-            tareaMembers.execute();
+            if(isNetworkAvailable()){
+                CargarHtmlTask tareaMembers = new CargarHtmlTask();
+                tareaMembers.execute();
 
-            CargarRssTask tareaNews = new CargarRssTask();
-            tareaNews.execute();
+                CargarRssTask tareaNews = new CargarRssTask();
+                tareaNews.execute();
+
+            }else{
+                Toast.makeText(this, "No hay conexión a internet", Toast.LENGTH_LONG).show();
+            }
             return true;
         }
 

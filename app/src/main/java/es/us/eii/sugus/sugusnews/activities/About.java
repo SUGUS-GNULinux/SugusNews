@@ -1,10 +1,12 @@
-package es.us.eii.sugus.sugusnews;
+package es.us.eii.sugus.sugusnews.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.widget.TextView;
+
+import es.us.eii.sugus.sugusnews.R;
 
 /**
  * Created by guilledelacruz on 19/05/15.
