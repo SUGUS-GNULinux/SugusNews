@@ -8,7 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +20,12 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.koushikdutta.ion.Ion;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import es.us.eii.sugus.sugusnews.PreferencesManager;
 import es.us.eii.sugus.sugusnews.R;
 import es.us.eii.sugus.sugusnews.adapters.AdapterMember;
 import es.us.eii.sugus.sugusnews.adapters.AdapterNew;
@@ -38,6 +43,12 @@ public class MainActivity extends ActionBarActivity {
     private List<Member> ms = new ArrayList<Member>();
     private AdapterNew nots;
     private AdapterMember mems;
+    private Context context;
+
+    private PreferencesManager preferencesManager;
+
+    private SwipeRefreshLayout mSwipeRefreshLayoutNews;
+    private SwipeRefreshLayout mSwipeRefreshLayoutMembers;
 
     private String appVersion;
 
@@ -53,10 +64,15 @@ public class MainActivity extends ActionBarActivity {
         mems = new AdapterMember(getApplicationContext(), me);
         final ListView m = (ListView) findViewById(R.id.listviewmembers);
         final ListView n = (ListView) findViewById(R.id.listviewnews);
+        preferencesManager = new PreferencesManager(this);
+
+        context=this;
+
+        mSwipeRefreshLayoutNews = (SwipeRefreshLayout) findViewById(R.id.lv_news_swipe_refresh_layout);
+        mSwipeRefreshLayoutMembers = (SwipeRefreshLayout) findViewById(R.id.lv_members_swipe_refresh_layout);
 
         m.setAdapter(mems);
         n.setAdapter(nots);
-
 
 
         Resources res = getResources();
@@ -100,12 +116,46 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        if(isNetworkAvailable()){
-            CargarHtmlTask tareaMembers = new CargarHtmlTask();
-            tareaMembers.execute();
 
+
+        mSwipeRefreshLayoutNews.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (isNetworkAvailable()) {
+                    CargarRssTask tareaNews = new CargarRssTask();
+                    tareaNews.execute();
+                } else {
+                    Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_LONG).show();
+                    mSwipeRefreshLayoutNews.setRefreshing(false);
+                }
+            }
+        });
+
+        mSwipeRefreshLayoutMembers.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (isNetworkAvailable()) {
+                    CargarHtmlTask tareaMembers = new CargarHtmlTask();
+                    tareaMembers.execute();
+                } else {
+                    Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_LONG).show();
+                    mSwipeRefreshLayoutMembers.setRefreshing(false);
+                }
+            }
+        });
+
+
+        if(preferencesManager.getIsFirstAccess()){
+            //Mostrar dialogo changelog y poner a false isFirstAccess
+        }
+
+
+        if(isNetworkAvailable()){
             CargarRssTask tareaNews = new CargarRssTask();
             tareaNews.execute();
+
+            CargarHtmlTask tareaMembers = new CargarHtmlTask();
+            tareaMembers.execute();
 
             searchUpdates(appVersionUrl);
         }else{
@@ -116,6 +166,11 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
+
+
+
+
+
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -148,19 +203,6 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
             return true;
         }
-        if (id == R.id.reload) {
-            if(isNetworkAvailable()){
-                CargarHtmlTask tareaMembers = new CargarHtmlTask();
-                tareaMembers.execute();
-
-                CargarRssTask tareaNews = new CargarRssTask();
-                tareaNews.execute();
-
-            }else{
-                Toast.makeText(this, "No hay conexión a internet", Toast.LENGTH_LONG).show();
-            }
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -186,6 +228,7 @@ public class MainActivity extends ActionBarActivity {
                 final ListView viewmembers = (ListView) findViewById(R.id.listviewmembers);
                 viewmembers.setAdapter(mems);
             }
+            mSwipeRefreshLayoutMembers.setRefreshing(false);
         }
     }
 
@@ -211,6 +254,7 @@ public class MainActivity extends ActionBarActivity {
                 final ListView viewnews = (ListView) findViewById(R.id.listviewnews);
                 viewnews.setAdapter(nots);
             }
+            mSwipeRefreshLayoutNews.setRefreshing(false);
         }
     }
 }
