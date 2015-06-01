@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,26 +24,34 @@ import com.koushikdutta.ion.future.ResponseFuture;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import es.us.eii.sugus.sugusnews.R;
 
 
-public class InAppUpdater extends ActionBarActivity {
+public class InAppUpdater extends AppCompatActivity {
 
-    private TextView mTvVersion;
-    private Button mBtnUpdate;
+
     private final String ApkUrl = "https://raw.githubusercontent.com/SUGUS-GNULinux/SugusNews/master/binaries/app-release.apk";
     private String mLatestAppVersion;
     private Context context;
-    private ProgressBar mProgressBar;
+
+    @InjectView(R.id.tvVersion)
+    TextView mTvVersion;
+    @InjectView(R.id.btnUpdate)
+    Button mBtnUpdate;
+    @InjectView(R.id.progressBar)
+    ProgressBar mProgressBar;
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inappupdater);
+        ButterKnife.inject(this);
+        setToolbar();
 
-        this.mTvVersion = (TextView) findViewById(R.id.tvVersion);
-        this.mBtnUpdate = (Button) findViewById(R.id.btnUpdate);
-        this.mProgressBar =(ProgressBar) findViewById(R.id.progressBar);
         this.context = this;
 
         Intent mIntent = getIntent();
@@ -75,6 +85,15 @@ public class InAppUpdater extends ActionBarActivity {
             }
         });
 
+
+
+
+    }
+
+
+    private void setToolbar(){
+        mToolbar.setTitle(getResources().getString(R.string.app_name));
+        setSupportActionBar(mToolbar);
 
     }
 

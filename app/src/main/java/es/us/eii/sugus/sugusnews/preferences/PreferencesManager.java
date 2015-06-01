@@ -1,4 +1,4 @@
-package es.us.eii.sugus.sugusnews;
+package es.us.eii.sugus.sugusnews.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;

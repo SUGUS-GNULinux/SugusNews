@@ -9,8 +9,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Xml;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,87 +20,99 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.koushikdutta.ion.Ion;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import es.us.eii.sugus.sugusnews.PreferencesManager;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import es.us.eii.sugus.sugusnews.preferences.PreferencesManager;
 import es.us.eii.sugus.sugusnews.R;
 import es.us.eii.sugus.sugusnews.adapters.AdapterMember;
 import es.us.eii.sugus.sugusnews.adapters.AdapterNew;
 import es.us.eii.sugus.sugusnews.models.Member;
 import es.us.eii.sugus.sugusnews.models.New;
-import es.us.eii.sugus.sugusnews.updater.InAppUpdater;
 import es.us.eii.sugus.sugusnews.updater.UpdateFinder;
 import es.us.eii.sugus.sugusnews.utils.MemberParserJSoup;
 import es.us.eii.sugus.sugusnews.utils.NewsParserDOM;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private List<New> nt = new ArrayList<New>();
-    private List<Member> ms = new ArrayList<Member>();
+    private List<New> nt = new ArrayList<>();
+    private List<Member> ms = new ArrayList<>();
     private AdapterNew nots;
     private AdapterMember mems;
     private Context context;
 
     private PreferencesManager preferencesManager;
 
-    private SwipeRefreshLayout mSwipeRefreshLayoutNews;
-    private SwipeRefreshLayout mSwipeRefreshLayoutMembers;
-
     private String appVersion;
 
-    private String appVersionUrl = "https://github.com/SUGUS-GNULinux/SugusNews/blob/master/README.md";
+    private final String appVersionUrl = "https://github.com/SUGUS-GNULinux/SugusNews/blob/master/README.md";
+
+    @InjectView(R.id.lv_news_swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayoutNews;
+    @InjectView(R.id.lv_members_swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayoutMembers;
+    @InjectView(R.id.tabHost)
+    TabHost mTabHost;
+    @InjectView(R.id.listviewmembers)
+    ListView mLvMembers;
+    @InjectView(R.id.listviewnews)
+    ListView mLvNews;
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
+        setToolbar();
 
         New[] no = {new New()};
         Member[] me = {new Member()};
         nots = new AdapterNew(getApplicationContext(), no);
         mems = new AdapterMember(getApplicationContext(), me);
-        final ListView m = (ListView) findViewById(R.id.listviewmembers);
-        final ListView n = (ListView) findViewById(R.id.listviewnews);
+
         preferencesManager = new PreferencesManager(this);
 
         context=this;
 
-        mSwipeRefreshLayoutNews = (SwipeRefreshLayout) findViewById(R.id.lv_news_swipe_refresh_layout);
-        mSwipeRefreshLayoutMembers = (SwipeRefreshLayout) findViewById(R.id.lv_members_swipe_refresh_layout);
 
-        m.setAdapter(mems);
-        n.setAdapter(nots);
+
+        mLvMembers.setAdapter(mems);
+        mLvNews.setAdapter(nots);
 
 
         Resources res = getResources();
 
-        TabHost tabs = (TabHost) findViewById(R.id.tabHost);
-        tabs.setup();
 
-        TabHost.TabSpec spec=tabs.newTabSpec("News");
+        mTabHost.setup();
+
+        TabHost.TabSpec spec=mTabHost.newTabSpec("News");
         spec.setContent(R.id.tab1);
 
         spec.setIndicator("News", res.getDrawable(android.R.drawable.ic_menu_agenda));
-        tabs.addTab(spec);
+        mTabHost.addTab(spec);
 
-        spec=tabs.newTabSpec("Alguien en Sugus?");
+        spec=mTabHost.newTabSpec("Alguien en Sugus?");
         spec.setContent(R.id.tab2);
         spec.setIndicator("Alguien en Sugus?", res.getDrawable(android.R.drawable.ic_menu_myplaces));
-        tabs.addTab(spec);
+        mTabHost.addTab(spec);
 
-        tabs.setCurrentTab(0);
+        mTabHost.setCurrentTab(0);
 
 
-        n.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mLvNews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                TextView title = (TextView) view.findViewById(R.id.newstitulo);
+                TextView mTvTitle = (TextView) view.findViewById(R.id.newstitulo);
 
-                if (!title.getText().toString().equals("No hay noticias disponibles")) {
+
+                if (!mTvTitle.getText().toString().equals("No hay noticias disponibles")) {
 
                     New n = (New) parent.getItemAtPosition(position);
 
@@ -168,7 +180,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    private void setToolbar(){
+        mToolbar.setTitle(getResources().getString(R.string.app_name));
+        setSupportActionBar(mToolbar);
 
+    }
 
 
 
@@ -225,8 +241,7 @@ public class MainActivity extends ActionBarActivity {
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                final ListView viewmembers = (ListView) findViewById(R.id.listviewmembers);
-                viewmembers.setAdapter(mems);
+                mLvMembers.setAdapter(mems);
             }
             mSwipeRefreshLayoutMembers.setRefreshing(false);
         }
@@ -251,8 +266,7 @@ public class MainActivity extends ActionBarActivity {
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                final ListView viewnews = (ListView) findViewById(R.id.listviewnews);
-                viewnews.setAdapter(nots);
+                mLvNews.setAdapter(nots);
             }
             mSwipeRefreshLayoutNews.setRefreshing(false);
         }
