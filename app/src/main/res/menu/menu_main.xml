@@ -3,4 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_acerca" android:title="@string/action_acerca"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_test" android:title="prueba"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>

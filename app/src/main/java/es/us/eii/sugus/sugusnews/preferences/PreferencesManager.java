@@ -20,12 +20,12 @@ public class PreferencesManager {
 
     }
 
-    public boolean getIsFirstAccess(){
-        return settings.getBoolean("isFirstAccess", true);
+    public String getVersion(){
+        return settings.getString("Version", null);
     }
 
-    public void setIsFirstAccess(boolean isFirstAccess){
-        settings_editor.putBoolean("isFirstAccess", isFirstAccess);
+    public void setVersion(String version){
+        settings_editor.putString("Version", version);
         settings_editor.commit();
     }
 }

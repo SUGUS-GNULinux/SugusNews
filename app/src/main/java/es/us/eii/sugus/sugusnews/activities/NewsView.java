@@ -3,11 +3,13 @@ package es.us.eii.sugus.sugusnews.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
@@ -39,6 +41,9 @@ public class NewsView extends AppCompatActivity {
         ButterKnife.inject(this);
         setToolbar();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Intent data = getIntent();
 
         mTvTitle.setText(data.getExtras().get("title").toString());
@@ -53,6 +58,17 @@ public class NewsView extends AppCompatActivity {
         mToolbar.setTitle(getResources().getString(R.string.app_name));
         setSupportActionBar(mToolbar);
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

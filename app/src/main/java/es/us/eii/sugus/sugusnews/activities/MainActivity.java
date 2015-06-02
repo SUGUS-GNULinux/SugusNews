@@ -20,8 +20,15 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+
+import org.jsoup.select.Evaluator;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private String appVersion;
 
     private final String appVersionUrl = "https://github.com/SUGUS-GNULinux/SugusNews/blob/master/README.md";
+    //private final String changelogUrl = "https://raw.githubusercontent.com/SUGUS-GNULinux/SugusNews/master/CHANGELOG";
+    private final String changelogUrl = "https://raw.githubusercontent.com/SUGUS-GNULinux/SugusNews/dev/CHANGELOG"; //for testing
 
     @InjectView(R.id.lv_news_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayoutNews;
@@ -70,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         setToolbar();
+
+
 
         New[] no = {new New()};
         Member[] me = {new Member()};
@@ -157,9 +168,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        if(preferencesManager.getIsFirstAccess()){
-            //Mostrar dialogo changelog y poner a false isFirstAccess
-        }
+
 
 
         if(isNetworkAvailable()){
@@ -170,6 +179,22 @@ public class MainActivity extends AppCompatActivity {
             tareaMembers.execute();
 
             searchUpdates(appVersionUrl);
+
+          /*  if(preferencesManager.getVersion()==null || !preferencesManager.getVersion().equals(appVersion)){   //improve in the future checking the changelog correspond with the actual version
+                String changelog = getChangelog();
+
+                if(changelog!=null){
+                    new MaterialDialog.Builder(this)
+                            .title("¿Qué hay de nuevo?")
+                            .content(changelog)
+                            .positiveText("Aceptar")
+                            .show();
+
+                    preferencesManager.setVersion(appVersion);
+                }
+
+            }*/
+
         }else{
             Toast.makeText(this, "No hay conexión a internet", Toast.LENGTH_LONG).show();
         }
@@ -186,7 +211,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private String getChangelog(){
 
+        String res = null;
+
+        try {
+            res = Ion.with(this).load(changelogUrl).asString().get().toString();
+        } catch (InterruptedException e) {
+            Toast.makeText(this, "Ocurrió un error al obtener los cambios", Toast.LENGTH_LONG).show();
+        } catch (ExecutionException e) {
+            Toast.makeText(this, "Ocurrió un error al obtener los cambios", Toast.LENGTH_LONG).show();
+        }
+
+        return res;
+
+    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -219,6 +258,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
+        if (id == R.id.action_test) {
+            String changelog = getChangelog();
+            new MaterialDialog.Builder(this)
+                    .title("¿Qué hay de nuevo?")
+                    .content(changelog)
+                    .positiveText("Aceptar")
+                    .show();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
