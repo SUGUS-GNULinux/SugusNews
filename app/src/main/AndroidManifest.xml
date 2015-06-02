@@ -24,14 +24,26 @@
         <activity
             android:name=".activities.NewsView"
             android:label="News" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+
         </activity>
         <activity
             android:name=".activities.About"
             android:label="Acerca de Sugus" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
             android:name=".updater.InAppUpdater"
             android:label="@string/title_activity_in_app_updater" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
         </activity>
     </application>
 
