@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private String appVersion;
 
     private final String appVersionUrl = "https://github.com/SUGUS-GNULinux/SugusNews/blob/master/README.md";
-    //private final String changelogUrl = "https://raw.githubusercontent.com/SUGUS-GNULinux/SugusNews/master/CHANGELOG";
-    private final String changelogUrl = "https://raw.githubusercontent.com/SUGUS-GNULinux/SugusNews/dev/CHANGELOG"; //for testing
+    private final String changelogUrl = "https://raw.githubusercontent.com/SUGUS-GNULinux/SugusNews/master/CHANGELOG";
 
     @InjectView(R.id.lv_news_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayoutNews;
@@ -180,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
             searchUpdates(appVersionUrl);
 
-          /*  if(preferencesManager.getVersion()==null || !preferencesManager.getVersion().equals(appVersion)){   //improve in the future checking the changelog correspond with the actual version
+            if(preferencesManager.getVersion()==null || !preferencesManager.getVersion().equals(appVersion)){   //improve in the future checking the changelog correspond with the actual version
                 String changelog = getChangelog();
 
                 if(changelog!=null){
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                     preferencesManager.setVersion(appVersion);
                 }
 
-            }*/
+            }
 
         }else{
             Toast.makeText(this, "No hay conexión a internet", Toast.LENGTH_LONG).show();
@@ -258,16 +257,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        if (id == R.id.action_test) {
-            String changelog = getChangelog();
-            new MaterialDialog.Builder(this)
-                    .title("¿Qué hay de nuevo?")
-                    .content(changelog)
-                    .positiveText("Aceptar")
-                    .show();
-            return true;
-        }
-
 
         return super.onOptionsItemSelected(item);
     }
